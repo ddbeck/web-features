@@ -146,6 +146,8 @@ function init(args) {
   const pushCmd = `git push --set-upstream origin ${releaseBranch}`;
   run(pushCmd);
 
+  // TODO: generate pretty diff
+
   // Create PR
   logger.info(`Creating PR for ${version}`);
   const title = `📦 Release web-features@${version}`;
@@ -153,6 +155,10 @@ function init(args) {
   const bodyFile = fileURLToPath(
     new URL("release-pull-description.md", import.meta.url)
   );
+
+  // TODO: Append pretty diff to description
+  const diffTemplate = ["```diff", "", "```"];
+
   const pullRequestCmd = [
     "gh pr create",
     `--title="${title}"`,
