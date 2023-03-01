@@ -16,6 +16,10 @@ const logger = winston.createLogger({
   transports: [loggerTransport],
 });
 
+const packages = {
+  "web-features": "./packages/web-features",
+};
+
 yargs(process.argv.slice(2))
   .scriptName("release")
   .usage("$0 <cmd> [args]")
@@ -28,12 +32,6 @@ yargs(process.argv.slice(2))
           describe: "the Semantic Versioning level for the release",
           choices: ["major", "minor", "patch", "prerelease"],
           default: "patch",
-        })
-        .option("package-dir", {
-          demandOption: true,
-          default: "./packages/web-features",
-          describe: "The package to initiate a release for",
-          type: "path",
         })
         .demandOption("semverlevel", "You must provide a semver level");
     },
@@ -122,16 +120,19 @@ function init(args) {
   execSync(checkoutCmd);
 
   // Bump version (no commit)
-  const packageDir = "./packages/web-features";
   const bumpCmd = `npm version --no-git-tag-version ${args.semverlevel}`;
   logger.info("Bumping version number");
   logger.debug(bumpCmd);
-  execSync(bumpCmd, { cwd: packageDir, stdio: "inherit" });
+  execSync(bumpCmd, { cwd: packages["web-features"], stdio: "inherit" });
   const { version } = JSON.parse(
-    readFileSync(join(packageDir, "package.json"), { encoding: "utf-8" })
+    readFileSync(join(packages["web-features"], "package.json"), {
+      encoding: "utf-8",
+    })
   );
   logger.debug(
-    readFileSync(join(packageDir, "package.json"), { encoding: "utf-8" })
+    readFileSync(join(packages["web-features"], "package.json"), {
+      encoding: "utf-8",
+    })
   );
 
   // Commit
