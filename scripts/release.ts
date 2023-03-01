@@ -38,6 +38,30 @@ yargs(process.argv.slice(2))
         .demandOption("semverlevel", "You must provide a semver level");
     },
     handler: init,
+  })
+  .command({
+    command: "update",
+    describe: "Update an existing release pull request",
+    builder: (yargs) => {
+      return yargs
+        .positional("pr", {
+          describe: "the PR to rebase and update",
+        })
+        .demandOption("pr");
+    },
+    handler: update,
+  })
+  .command({
+    command: "publish",
+    describe: "Publish the package to npm",
+    builder: (yargs) => {
+      return yargs
+        .positional("pr", {
+          describe: "the PR to rebase and update",
+        })
+        .demandOption("pr");
+    },
+    handler: publish,
   }).argv;
 
 function run(cmd: string) {
@@ -138,4 +162,16 @@ function init(args) {
     `--head="${releaseBranch}"`,
   ].join(" ");
   run(pullRequestCmd);
+}
+
+function update(args) {
+  // TODO: Rebase
+  // TODO: Run `npm run build`
+  // TODO: Commit results of `npm run build`
+  throw Error("Not implemented");
+}
+
+function publish(args) {
+  // TODO: Run `npm publish …`
+  throw Error("Not implemented");
 }
