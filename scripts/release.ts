@@ -26,7 +26,7 @@ const logger = winston.createLogger({
 
 const packages = {
   "web-features": fileURLToPath(
-    new URL("packages/web-features", import.meta.url)
+    new URL("../packages/web-features", import.meta.url)
   ),
 };
 
