@@ -1,7 +1,15 @@
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
-import { readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import {
+  readFileSync,
+  mkdtempSync,
+  writeFileSync,
+  copyFileSync,
+  appendFileSync,
+} from "node:fs";
+import { cwd } from "node:process";
 
 import winston from "winston";
 import yargs from "yargs";
@@ -66,6 +74,47 @@ function run(cmd: string) {
   execSync(cmd, { stdio: "inherit" });
 }
 
+function diffJson(): string {
+  const temporaryDir = mkdtempSync(join(tmpdir(), "web-features-"));
+
+  execSync("npm install web-features", {
+    cwd: temporaryDir,
+    encoding: "utf-8",
+  });
+
+  const releasedJson = join(
+    temporaryDir,
+    "node_modules",
+    "web-features",
+    "index.json"
+  );
+  const prettyReleasedJson = execSync(`jq . "${releasedJson}"`, {
+    encoding: "utf-8",
+  });
+  const prettyReleasedJsonFp = join(temporaryDir, "index.released.pretty.json");
+  writeFileSync(prettyReleasedJsonFp, prettyReleasedJson);
+
+  execSync("npm run build", { stdio: "inherit" });
+  const preparedJson = join(packages["web-features"], "index.json");
+  const prettyPreparedJson = execSync(`jq . "${preparedJson}"`, {
+    encoding: "utf-8",
+  });
+  const prettyPreparedJsonFp = join(temporaryDir, "index.prepared.pretty.json");
+  writeFileSync(prettyPreparedJsonFp, prettyPreparedJson);
+
+  try {
+    return execSync(
+      `diff "${prettyReleasedJsonFp}" "${prettyPreparedJsonFp}"`,
+      { encoding: "utf-8" }
+    );
+  } catch (err) {
+    if (err.status === 1) {
+      return err.stdout;
+    }
+    throw err;
+  }
+}
+
 function init(args) {
   logger.info("Running preflight checks");
 
@@ -80,7 +129,7 @@ function init(args) {
   }
 
   // Make sure gh CLI is installed and has auth
-  logger.info("Confirming gh CLI is present and authorized");
+  logger.info("Confirming gh CLI is installed and authorized");
   const ghVersionCmd = "gh version";
   try {
     logger.debug(ghVersionCmd);
@@ -102,6 +151,18 @@ function init(args) {
     logger.error(err.stderr);
     process.exit(1);
   }
+
+  logger.info("Confirming jq is installed");
+  const jqVersionCmd = "jq --version";
+  try {
+    logger.debug(jqVersionCmd);
+    execSync(jqVersionCmd);
+  } catch (err) {
+    logger.error("jq failed to run. Do you have it installed?", err.error);
+    process.exit(1);
+  }
+
+  const diff = diffJson();
 
   // Start a release branch
   // Convention borrowed from https://github.com/w3c/webref/blob/60ebf71b9d555c523975cfefb08f5420d12b7293/tools/prepare-release.js#L164-L165
@@ -145,8 +206,6 @@ function init(args) {
   logger.info("Pushing release branch");
   const pushCmd = `git push --set-upstream origin ${releaseBranch}`;
   run(pushCmd);
-
-  // TODO: generate pretty diff
 
   // Create PR
   logger.info(`Creating PR for ${version}`);
