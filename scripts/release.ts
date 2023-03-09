@@ -116,21 +116,34 @@ function diffJson(): string {
   }
 }
 
-function init(args) {
+function preflight(): void {
   logger.info("Running preflight checks");
 
-  // Confirm base branch
-  logger.info("Checking base branch");
+  logger.verbose("Checking that working directory is clean");
+  const cleanCmd = "git diff-index --quiet HEAD";
+  try {
+    logger.debug(cleanCmd);
+    execSync(cleanCmd);
+  } catch (err) {
+    logger.error(
+      "Working directory is not clean. Stash your changes and try again."
+    );
+    process.exit(1);
+  }
+
+  logger.verbose("Checking base branch");
   const headCmd = "git rev-parse --abbrev-ref HEAD";
   logger.debug(headCmd);
   const head = execSync(headCmd, { encoding: "utf-8" }).trim();
 
   if (head !== "main") {
+    // TODO: uncomment below, after we create a GitHub Actions workflow to do this automatically
+    // logger.error("Base banch is not main");
+    // process.exit(1);
     logger.warn("Base banch is not main");
   }
 
-  // Make sure gh CLI is installed and has auth
-  logger.info("Confirming gh CLI is installed and authorized");
+  logger.verbose("Confirming gh CLI is installed and authorized");
   const ghVersionCmd = "gh version";
   try {
     logger.debug(ghVersionCmd);
@@ -153,7 +166,7 @@ function init(args) {
     process.exit(1);
   }
 
-  logger.info("Confirming jq is installed");
+  logger.verbose("Confirming jq is installed");
   const jqVersionCmd = "jq --version";
   try {
     logger.debug(jqVersionCmd);
@@ -162,6 +175,10 @@ function init(args) {
     logger.error("jq failed to run. Do you have it installed?", err.error);
     process.exit(1);
   }
+}
+
+function init(args) {
+  preflight();
 
   const diff = diffJson();
 
@@ -172,7 +189,7 @@ function init(args) {
     .replace(/[\-T:\.Z]/g, "")}`;
   logger.info(`Starting release branch ${releaseBranch}`);
 
-  const branchCmd = `git branch ${releaseBranch} ${head}`;
+  const branchCmd = `git branch ${releaseBranch} HEAD`;
   run(branchCmd);
 
   // Check out release branch
