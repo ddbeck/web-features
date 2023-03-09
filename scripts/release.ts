@@ -25,7 +25,9 @@ const logger = winston.createLogger({
 });
 
 const packages = {
-  "web-features": "./packages/web-features",
+  "web-features": fileURLToPath(
+    new URL("packages/web-features", import.meta.url)
+  ),
 };
 
 yargs(process.argv.slice(2))
@@ -104,7 +106,7 @@ function diffJson(): string {
 
   try {
     return execSync(
-      `diff "${prettyReleasedJsonFp}" "${prettyPreparedJsonFp}"`,
+      `diff --unified "${prettyReleasedJsonFp}" "${prettyPreparedJsonFp}"`,
       { encoding: "utf-8" }
     );
   } catch (err) {
