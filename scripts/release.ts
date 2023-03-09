@@ -156,14 +156,16 @@ function init(args) {
     new URL("release-pull-description.md", import.meta.url)
   );
 
-  // TODO: Append pretty diff to description
-  const diffTemplate = ["```diff", "", "```"];
+  const temporaryDir = mkdtempSync(join(tmpdir(), "pull-request-"));
+  const temporaryBodyFile = join(temporaryDir, "body.md");
+  copyFileSync(bodyFile, temporaryBodyFile);
+  appendFileSync(temporaryBodyFile, ["```diff", diff, "```"].join("\n"));
 
   const pullRequestCmd = [
     "gh pr create",
     `--title="${title}"`,
     `--reviewer="${reviewer}"`,
-    `--body-file=${bodyFile}`,
+    `--body-file=${temporaryBodyFile}`,
     `--repo="ddbeck/feature-set"`, // TODO: remove after testing
     `--base="main"`,
     `--head="${releaseBranch}"`,
