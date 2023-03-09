@@ -1,15 +1,14 @@
 import { execSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
 import {
-  readFileSync,
-  mkdtempSync,
-  writeFileSync,
-  copyFileSync,
   appendFileSync,
+  copyFileSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
 } from "node:fs";
-import { cwd } from "node:process";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import winston from "winston";
 import yargs from "yargs";
