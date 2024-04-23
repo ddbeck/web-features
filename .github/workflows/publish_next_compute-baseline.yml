@@ -3,6 +3,7 @@ name: Publish compute-baseline@next
 on:
   push:
     branches:
+      # TODO: target main
       - "main-demo"
     paths:
       - packages/compute-baseline/**
@@ -24,6 +25,7 @@ jobs:
       - run: npm ci
       - run: npm test
   publish:
+    # TODO: UNCOMMENT
     # if: github.repository == 'web-platform-dx/web-features'
     runs-on: ubuntu-latest
     needs: "test"
@@ -49,5 +51,6 @@ jobs:
           VERSION: ${{ steps.version.outputs.VERSION }}
           TIMESTAMP: ${{ steps.timestamp.outputs.TIMESTAMP }}
       - run: npm publish --dry-run --workspace=${{ env.package }} --tag ${{ env.dist_tag }}
+        # TODO: un-dry run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
