@@ -9,6 +9,8 @@ on:
       - groups/**
       - packages/web-features/**
       - snapshots/**
+      - index.ts
+      - scripts/build.ts
 
 env:
   package: "web-features"
