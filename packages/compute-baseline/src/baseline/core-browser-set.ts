@@ -1,5 +1,7 @@
 import { Compat } from "../browser-compat-data/compat";
 
+// EDIT
+
 export const identifiers = [
   "chrome",
   "chrome_android",
