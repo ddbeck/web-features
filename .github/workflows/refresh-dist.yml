@@ -30,6 +30,7 @@ jobs:
         env:
           CHANGED_FEATURES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
         run: |
+          echo ${{ steps.changed-markdown-files.outputs.all_changed_files }}
           npx tsx scripts/dist.ts $CHANGED_FEATURES
 
       - uses: stefanzweifel/git-auto-commit-action@v5
