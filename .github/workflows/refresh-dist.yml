@@ -12,29 +12,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get all changed markdown files
-        id: changed-features
+      - id: changed-files
         uses: tj-actions/changed-files@v44
         with:
           files: |
             features/**/*.yml
 
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
       - uses: actions/setup-node@v4
-        if: steps.changed-features.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
 
       - run: npm install
-        if: steps.changed-features.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
 
       - name: Run npm run dist
-        if: steps.changed-features.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
-          CHANGED_FEATURES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+          CHANGED_FEATURES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          echo ${{ steps.changed-markdown-files.outputs.all_changed_files }}
-          npx tsx scripts/dist.ts $CHANGED_FEATURES
+          npx tsx scripts/dist.ts ${CHANGED_FEATURES}
 
       - uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.changed-features.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         with:
           commit_message: Refresh dists
 
