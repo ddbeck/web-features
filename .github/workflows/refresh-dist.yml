@@ -17,14 +17,7 @@ jobs:
         with:
           files: |
             features/**/*.yml
-
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: |
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-          done
+            features/**/*.yml.dist
 
       - uses: actions/setup-node@v4
         if: steps.changed-files.outputs.any_changed == 'true'
