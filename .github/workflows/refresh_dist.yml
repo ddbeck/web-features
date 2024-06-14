@@ -58,7 +58,7 @@ jobs:
           PR_URL: https://github.com/${{ github.repo.name }}/pull/${{ github.event.number }}
         run: |
           mkdir -p ./pr
-          echo $PR_NUMBER > ./pr/pr_url
+          echo $PR_URL > ./pr/pr_url
 
       - uses: actions/upload-artifact@v4
         with:
