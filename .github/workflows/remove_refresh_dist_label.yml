@@ -33,8 +33,9 @@ jobs:
             let fs = require('fs');
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_url.zip`, Buffer.from(download.data));
 
-      - run: echo $(unzip -P pr_url.zip)
+      - run: unzip -p pr_url.zip
+      - run: unzip -l pr_url.zip
 
-      - run: gh pr edit $(unzip -P pr_url.zip) --remove-label "refresh dist"
+      - run: gh pr edit "$(unzip -p pr_url.zip)" --remove-label "refresh dist"
         env:
           GH_TOKEN: ${{ github.token }}
