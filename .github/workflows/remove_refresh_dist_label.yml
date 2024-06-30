@@ -2,27 +2,38 @@ name: Remove dist label
 
 on:
   workflow_run:
-    workflows: [Refresh dist files]
+    workflows: [Refresh dist files (unsafe)]
     types: [completed]
 
 jobs:
-  unlabel:
+  commit_and_unlabel:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+        # NOTE: This checkout is unsafe!
+        # Treat it only as passive data; don't run any commands or execute code from this checkout!
+        # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+
       # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#using-data-from-the-triggering-workflow
-      - name: Get PR URL artifact
+      - name: Get PR artifact
         uses: actions/github-script@v7
         with:
           script: |
+            console.log("Fetching all…");
             let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
                owner: context.repo.owner,
                repo: context.repo.repo,
                run_id: context.payload.workflow_run.id,
             });
+            console.log("Matching…");
             let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "pr_url"
+              return artifact.name == "pr"
             })[0];
+            console.log("Downloading…");
             let download = await github.rest.actions.downloadArtifact({
                owner: context.repo.owner,
                repo: context.repo.repo,
@@ -30,8 +41,18 @@ jobs:
                archive_format: 'zip',
             });
             let fs = require('fs');
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_url.zip`, Buffer.from(download.data));
+            console.log("Writing zip to file…");
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr.zip`, Buffer.from(download.data));
 
-      - run: gh pr edit "$(unzip -p pr_url.zip)" --remove-label "refresh dist"
+      - run: |
+          ls -lah
+          unzip -p pr.zip refresh_dist.patch
+          unzip -p pr.zip refresh_dist.patch | git apply
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Refresh dist files
+
+      - run: gh pr edit "$(unzip -p pr.zip url.txt)" --remove-label "refresh dist"
         env:
           GH_TOKEN: ${{ github.token }}

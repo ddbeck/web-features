@@ -22,5 +22,5 @@ compat_features:
   # Only supported in Firefox and non-essential since only the topmost
   # fullscreen element is typically visible. For this to matter, you need nested
   # fullscreen with non-opaque background in the topmost fullscreen element.
-  # - css.selectors.fullscreen.all_elements
+  - css.selectors.fullscreen.all_elements
   - html.elements.iframe.allowfullscreen

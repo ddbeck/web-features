@@ -1,8 +1,12 @@
-name: Refresh dist files
+name: Refresh dist files (unsafe)
 
 on:
   pull_request:
     types: [labeled]
+
+env:
+  PR_URL_FILE: pr/url.txt
+  REFRESH_DIST_PATCH_FILE: pr/refresh_dist.patch
 
 jobs:
   refresh:
@@ -11,9 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - id: changed-package-json
         uses: tj-actions/changed-files@v44
@@ -47,20 +48,18 @@ jobs:
         run: |
           npm run dist
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        if: steps.changed-package-json.outputs.any_changed == 'true' || steps.changed-features.outputs.any_changed == 'true'
-        with:
-          commit_message: Refresh dist files
-
       # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#using-data-from-the-triggering-workflow
-      - name: Save PR URL
+      - name: Save patch and PR URL
         env:
           PR_URL: https://github.com/${{ github.repository }}/pull/${{ github.event.number }}
         run: |
           mkdir -p ./pr
-          echo $PR_URL > ./pr/pr_url
+          git diff --patch > ${{ env.REFRESH_DIST_PATCH_FILE }}
+          echo $PR_URL > ${{ env.PR_URL_FILE }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: pr_url
-          path: pr/
+          name: pr
+          path: |
+            ${{ env.REFRESH_DIST_PATCH_FILE }}
+            ${{ env.PR_URL_FILE }}
