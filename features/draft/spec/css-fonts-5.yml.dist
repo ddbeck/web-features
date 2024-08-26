@@ -262,20 +262,6 @@ compat_features:
   # baseline_low_date: 2020-07-28
   # baseline_high_date: 2023-01-28
   # support:
-  #   chrome: "79"
-  #   chrome_android: "79"
-  #   edge: "79"
-  #   firefox: ≤72
-  #   firefox_android: "79"
-  #   safari: ≤13.1
-  #   safari_ios: ≤13.4
-  - css.properties.font-optical-sizing.auto
-  - css.properties.font-optical-sizing.none
-
-  # baseline: high
-  # baseline_low_date: 2020-07-28
-  # baseline_high_date: 2023-01-28
-  # support:
   #   chrome: ≤83
   #   chrome_android: "83"
   #   edge: "83"
@@ -284,20 +270,6 @@ compat_features:
   #   safari: ≤13.1
   #   safari_ios: ≤13.4
   - css.properties.font-variant.none
-
-  # baseline: low
-  # baseline_low_date: 2022-11-15
-  # support:
-  #   chrome: "101"
-  #   chrome_android: "101"
-  #   edge: "101"
-  #   firefox: "107"
-  #   firefox_android: "107"
-  #   safari: "15.4"
-  #   safari_ios: "15.4"
-  - css.properties.font-palette.dark
-  - css.properties.font-palette.light
-  - css.properties.font-palette.normal
 
   # baseline: low
   # baseline_low_date: 2023-02-09
@@ -399,6 +371,18 @@ compat_features:
   #   chrome: "111"
   #   chrome_android: "111"
   #   edge: "111"
+  - api.CSSFontFeatureValuesMap
+  - api.CSSFontFeatureValuesMap.@@iterator
+  - api.CSSFontFeatureValuesMap.clear
+  - api.CSSFontFeatureValuesMap.delete
+  - api.CSSFontFeatureValuesMap.entries
+  - api.CSSFontFeatureValuesMap.forEach
+  - api.CSSFontFeatureValuesMap.get
+  - api.CSSFontFeatureValuesMap.has
+  - api.CSSFontFeatureValuesMap.keys
+  - api.CSSFontFeatureValuesMap.set
+  - api.CSSFontFeatureValuesMap.size
+  - api.CSSFontFeatureValuesMap.values
   - api.CSSFontFeatureValuesRule.annotation
   - api.CSSFontFeatureValuesRule.characterVariant
   - api.CSSFontFeatureValuesRule.ornaments

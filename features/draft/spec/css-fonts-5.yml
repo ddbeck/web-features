@@ -1,10 +1,22 @@
-draft_date: 2024-08-19
+draft_date: 2024-08-26
 name: CSS Fonts Module Level 5
 description: TODO
 spec: https://drafts.csswg.org/css-fonts-5/
 compat_features:
   - api.CSSFontFaceRule
   - api.CSSFontFaceRule.style
+  - api.CSSFontFeatureValuesMap
+  - api.CSSFontFeatureValuesMap.@@iterator
+  - api.CSSFontFeatureValuesMap.clear
+  - api.CSSFontFeatureValuesMap.delete
+  - api.CSSFontFeatureValuesMap.entries
+  - api.CSSFontFeatureValuesMap.forEach
+  - api.CSSFontFeatureValuesMap.get
+  - api.CSSFontFeatureValuesMap.has
+  - api.CSSFontFeatureValuesMap.keys
+  - api.CSSFontFeatureValuesMap.set
+  - api.CSSFontFeatureValuesMap.size
+  - api.CSSFontFeatureValuesMap.values
   - api.CSSFontFeatureValuesRule.annotation
   - api.CSSFontFeatureValuesRule.characterVariant
   - api.CSSFontFeatureValuesRule.ornaments
@@ -29,11 +41,6 @@ compat_features:
   - css.properties.font-feature-settings.normal
   - css.properties.font-kerning
   - css.properties.font-language-override
-  - css.properties.font-optical-sizing.auto
-  - css.properties.font-optical-sizing.none
-  - css.properties.font-palette.dark
-  - css.properties.font-palette.light
-  - css.properties.font-palette.normal
   - css.properties.font-size
   - css.properties.font-stretch
   - css.properties.font-style
@@ -129,12 +136,17 @@ compat_features:
 #   - css.at-rules.font-palette-values.font-family
 #   - css.at-rules.font-palette-values.override-colors
 #   - css.properties.font-palette
+#   - css.properties.font-palette.dark
+#   - css.properties.font-palette.light
+#   - css.properties.font-palette.normal
 # - @font-face:
 #   - css.at-rules.font-face
 #   - css.at-rules.font-face.font-family
 #   - css.at-rules.font-face.src
 # - font-optical-sizing:
 #   - css.properties.font-optical-sizing
+#   - css.properties.font-optical-sizing.auto
+#   - css.properties.font-optical-sizing.none
 # - font-palette animation:
 #   - css.properties.font-palette.palette-mix_function
 # - font-size-adjust:
