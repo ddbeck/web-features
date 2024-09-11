@@ -35,6 +35,11 @@ yargs(process.argv.slice(2))
     nargs: 1,
     default: "web-platform-dx/web-features",
   })
+  .option("remote", {
+    describe: "The name of the remote to push the release branch to",
+    nargs: 1,
+    default: "origin",
+  })
   .command({
     command: "diff [from [to]]",
     describe:
@@ -92,7 +97,7 @@ function init(args) {
 
   // Push release branch
   logger.info("Pushing release branch");
-  const pushCmd = `git push --set-upstream origin ${releaseBranch}`;
+  const pushCmd = `git push --set-upstream ${args.remote} ${releaseBranch}`;
   run(pushCmd);
 
   // Create PR
