@@ -1,4 +1,4 @@
-draft_date: 2024-09-09
+draft_date: 2024-09-30
 name: CSS Font Loading Module Level 3
 description: TODO
 spec: https://drafts.csswg.org/css-font-loading-3/
@@ -6,12 +6,9 @@ compat_features:
   - api.Document.fonts
   - api.FontFace
   - api.FontFace.FontFace
-  - api.FontFace.ascentOverride
-  - api.FontFace.descentOverride
   - api.FontFace.display
   - api.FontFace.family
   - api.FontFace.featureSettings
-  - api.FontFace.lineGapOverride
   - api.FontFace.load
   - api.FontFace.loaded
   - api.FontFace.status
@@ -36,3 +33,9 @@ compat_features:
   - api.FontFaceSetLoadEvent.FontFaceSetLoadEvent
   - api.FontFaceSetLoadEvent.fontfaces
   - api.WorkerGlobalScope.fonts
+
+# The following features in the spec are already part of web-features:
+# - Font metric overrides:
+#   - api.FontFace.ascentOverride
+#   - api.FontFace.descentOverride
+#   - api.FontFace.lineGapOverride

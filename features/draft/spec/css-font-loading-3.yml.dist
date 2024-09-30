@@ -124,17 +124,6 @@ compat_features:
 
   # baseline: false
   # support:
-  #   chrome: "87"
-  #   chrome_android: "87"
-  #   edge: "87"
-  #   firefox: "89"
-  #   firefox_android: "89"
-  - api.FontFace.ascentOverride
-  - api.FontFace.descentOverride
-  - api.FontFace.lineGapOverride
-
-  # baseline: false
-  # support:
   #   firefox: "62"
   #   firefox_android: "62"
   - api.FontFace.variationSettings
