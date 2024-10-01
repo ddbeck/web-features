@@ -82,5 +82,5 @@ jobs:
             data.extended.json
           prerelease: true
           name: v${{ steps.version.outputs.VERSION }}
-          tag_name: ${{ dist_tag }}
+          tag_name: ${{ env.dist_tag }}
           fail_on_unmatched_files: true
