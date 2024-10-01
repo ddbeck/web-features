@@ -84,7 +84,7 @@ jobs:
             ${{ env.package_dir }}/data.json
             data.extended.json
           prerelease: true
-          name: v${{ steps.version.outputs.VERSION }}
+          name: web-features@next
           body: This is a prerelease generated from `main` (${{ steps.timestamp_and_hash.outputs.SHORT_HASH }}).
           tag_name: ${{ env.dist_tag }}
           fail_on_unmatched_files: true
