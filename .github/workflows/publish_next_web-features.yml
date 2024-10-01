@@ -85,6 +85,6 @@ jobs:
             data.extended.json
           prerelease: true
           name: web-features@next
-          body: This is a prerelease generated from `main` (${{ steps.timestamp_and_hash.outputs.SHORT_HASH }}).
+          body: This is a continuously-updated prerelease generated from `main` (currently at ${{ steps.timestamp_and_hash.outputs.SHORT_HASH }}).
           tag_name: ${{ env.dist_tag }}
           fail_on_unmatched_files: true
