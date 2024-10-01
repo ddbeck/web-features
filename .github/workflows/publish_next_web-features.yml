@@ -13,6 +13,9 @@ on:
       - index.ts
       - scripts/build.ts
 
+permissions:
+  contents: write
+
 env:
   package: "web-features"
   package_dir: "packages/web-features"
@@ -38,6 +41,7 @@ jobs:
       - name: Get timestamp
         id: timestamp
         run: echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -45,7 +49,10 @@ jobs:
           cache: npm
           registry-url: "https://registry.npmjs.org"
       - run: npm ci
+
       - run: npm run build
+      - run: npm run build:extended
+
       - name: Get package.json version
         id: version
         run: echo "VERSION=$(npm version --json | jq --raw-output '.["${{ env.package }}"]')" >> $GITHUB_OUTPUT
@@ -60,9 +67,20 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.VERSION }}
           TIMESTAMP: ${{ steps.timestamp.outputs.TIMESTAMP }}
-
       # TODO: un-dry-run this step
       - run: npm publish --dry-run --tag ${{ env.dist_tag }}
         working-directory: ${{ env.package_dir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish pre-release on GitHub
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 #v2.0.8
+        with:
+          files: |
+            schemas/data.schema.json
+            ${{ env.package_dir }}/data.json
+            data.extended.json
+          prerelease: true
+          name: v${{ steps.version.outputs.VERSION }}
+          tag_name: ${{ dist_tag }}
+          fail_on_unmatched_files: true
