@@ -1,5 +1,5 @@
 import { DefinedError } from "ajv";
-import { getStatus } from "compute-baseline";
+import { computeBaseline } from "compute-baseline";
 import stringify from "fast-json-stable-stringify";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
@@ -70,7 +70,11 @@ function buildExtendedJSON() {
     ) {
       featureData.status.by_compat_key = {};
       for (const key of featureData.compat_features) {
-        featureData.status.by_compat_key[key] = getStatus(id, key);
+        featureData.status.by_compat_key[key] = JSON.parse(
+          computeBaseline({
+            compatKeys: [key],
+          }).toJSON(),
+        );
       }
     }
   }
