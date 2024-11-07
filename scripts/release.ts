@@ -139,7 +139,7 @@ function makePullBody(diff: string) {
   const body = [
     readFileSync(bodyFile, { encoding: "utf-8" }),
     "```diff",
-    diff,
+    // diff,
     "```",
   ].join("\n");
   return body;
