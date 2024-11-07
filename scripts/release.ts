@@ -62,12 +62,18 @@ yargs(process.argv.slice(2))
           choices: semverChoices,
           default: "patch",
         })
+        .option("reviewers", {
+          describe: "Comma-separated list of users to request reviews from",
+          nargs: 1,
+        })
         .demandOption("semverlevel", "You must provide a semver level");
     },
     handler: init,
   }).argv;
 
 function init(args) {
+  logger.debug(JSON.stringify(args));
+
   preflight({ expectedBranch: "main" });
 
   const diff = diffJson();
@@ -87,6 +93,11 @@ function init(args) {
   logger.debug(checkoutCmd);
   execSync(checkoutCmd);
 
+  // Get previous version
+  const { version: previousVersion } = readPackageJSON(
+    packages["web-features"],
+  );
+
   // Bump version (no tag)
   const newVersion = bumpVersion(args.semverlevel);
 
@@ -98,13 +109,13 @@ function init(args) {
   // Create PR
   const title = [pullTitleBase, newVersion].join("");
   logger.info(`Creating PR: ${title}`);
-  const reviewer = "ddbeck";
-  const body = makePullBody(diff);
+  const reviewers = args.reviewers.split(",");
+  const body = makePullBody(newVersion, previousVersion);
 
   const pullRequestCmd = [
     "gh pr create",
     `--title="${title}"`,
-    `--reviewer="${reviewer}"`,
+    ...reviewers.map((r) => `--reviewer=${r}`),
     `--body-file=-`,
     `--base="main"`,
     `--head="${releaseBranch}"`,
@@ -132,14 +143,32 @@ function bumpVersion(semverlevel: typeof semverChoices): string {
   return version;
 }
 
-function makePullBody(diff: string) {
+function makePullBody(newVersion: string, previousVersion: string) {
+  // https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#generate-release-notes-content-for-a-release
+  const relnotesCmd = [
+    "gh",
+    "api",
+    "--method POST",
+    `-H "Accept: application/vnd.github+json"`,
+    `-H "X-GitHub-Api-Version: 2022-11-28"`,
+    "/repos/{owner}/{repo}/releases/generate-notes",
+    `-f "tag_name=v${newVersion}"`,
+    `-f "target_commitish=main"`,
+    `-f "previous_tag_name=v${previousVersion}"`,
+  ].join(" ");
+  const relNotes = execSync(relnotesCmd, {
+    cwd: packages["web-features"],
+    encoding: "utf-8",
+  });
+  logger.debug(relNotes);
+
   const bodyFile = fileURLToPath(
     new URL("release-pull-description.md", import.meta.url),
   );
   const body = [
     readFileSync(bodyFile, { encoding: "utf-8" }),
-    "```diff",
-    diff,
+    "```json",
+    relNotes,
     "```",
   ].join("\n");
   return body;
