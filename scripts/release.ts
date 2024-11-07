@@ -62,12 +62,18 @@ yargs(process.argv.slice(2))
           choices: semverChoices,
           default: "patch",
         })
+        .option("reviewers", {
+          describe: "Comma-separated list of users to request reviews from",
+          nargs: 1,
+        })
         .demandOption("semverlevel", "You must provide a semver level");
     },
     handler: init,
   }).argv;
 
 function init(args) {
+  logger.debug(JSON.stringify(args));
+
   preflight({ expectedBranch: "main" });
 
   const diff = diffJson();
@@ -98,13 +104,13 @@ function init(args) {
   // Create PR
   const title = [pullTitleBase, newVersion].join("");
   logger.info(`Creating PR: ${title}`);
-  const reviewer = "ddbeck";
+  const reviewers = args.reviewers.split(",");
   const body = makePullBody(diff);
 
   const pullRequestCmd = [
     "gh pr create",
     `--title="${title}"`,
-    `--reviewer="${reviewer}"`,
+    ...reviewers.map((r) => `--reviewer=${r}`),
     `--body-file=-`,
     `--base="main"`,
     `--head="${releaseBranch}"`,
@@ -139,7 +145,6 @@ function makePullBody(diff: string) {
   const body = [
     readFileSync(bodyFile, { encoding: "utf-8" }),
     "```diff",
-    diff,
     "```",
   ].join("\n");
   return body;
