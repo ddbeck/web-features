@@ -8,7 +8,9 @@ end | fzf)
 if git checkout --quiet --detach $release
     echo $release
     if npm install --silent
+        echo ```
         npx tsx ./scripts/stats.ts
+        echo ```
     end
     if git checkout --quiet -
         npm install --silent
