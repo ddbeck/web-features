@@ -2,8 +2,13 @@
 
 set -l release (begin
   echo main
+  echo latest
   git tag | rg '^v'
 end | fzf)
+
+if test $release = latest
+    set release (gh release view --json tagName --jq .tagName)
+end
 
 if git checkout --quiet --detach $release
     echo $release
