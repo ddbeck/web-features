@@ -19,6 +19,13 @@ jobs:
       - run: npm run build
       - name: Pretty print built JSON
         run: jq . packages/web-features/data.json
+  
+  vale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: errata-ai/vale-action@v2.1.1
+
   test:
     runs-on: ubuntu-latest
     steps:

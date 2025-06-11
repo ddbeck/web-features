@@ -195,6 +195,8 @@ Omit "is used" where there's no loss in meaning.
 For example, prefer "The feature reads…" over "The feature is used to read…"
 ([#727](https://github.com/web-platform-dx/web-features/pull/727#discussion_r1537635981))
 
+✅ Linted with vale: [`avoid.yml`](.vale/web-features-styles/avoid.yml)
+
 #### longhands and shorthands
 
 Use the terms "shorthand" and "longhand" to describe the relationship between CSS properties that combine multiple properties into a single declaration and the individual properties. 
