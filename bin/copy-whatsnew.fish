@@ -11,6 +11,9 @@ if test $days_since_thursday -gt 7
 end
 set last_thursday (gdate -d "$days_since_thursday days ago" +%Y-%m-%d)
 
+# Get recent releases
+set releases (gh api --paginate 'repos/web-platform-dx/web-features/releases' --jq "map(select(.published_at >= \"$last_thursday\" and .tag_name != \"next\")) | map(\"[\(.tag_name)](\(.html_url))\") | join(\", \")")
+
 # Get the latest comment URL using GitHub CLI
 set issue_url "https://github.com/web-platform-dx/web-features/issues/788"
 set latest_comment_id (gh api --paginate 'repos/web-platform-dx/web-features/issues/788/comments' --jq 'sort_by(.created_at) | .[-1].id')
@@ -18,7 +21,7 @@ set latest_comment_url "$issue_url#issuecomment-$latest_comment_id"
 
 # Template with replacements
 markdown-file-to-rtf-pasteboard.fish (echo "* What's new
-    * Releases: TK
+    * Releases: $releases
     * Highlights:
         * TK
     * [Merged this week](https://github.com/web-platform-dx/web-features/pulls?q=is%3Apr+merged%3A$last_thursday..$yesterday+sort%3Aupdated-desc+)
