@@ -3,24 +3,31 @@ name: BCD upgrade
 on:
   pull_request:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      github_event_number:
+        description: An issue or PR number
+        required: true
+        type: number
 permissions:
   pull-requests: write
 jobs:
   post-comment:
     name: "Post checklist"
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    # if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
-      - name: Fetch Dependabot metadata
-        id: dependabot-metadata
-        continue-on-error: true
-        uses: dependabot/fetch-metadata@08eff52bf64351f401fb50d4972fa95b9f2c2d1b #v2.4.0
+      # - name: Fetch Dependabot metadata
+      #   id: dependabot-metadata
+      #   continue-on-error: true
+      #   uses: dependabot/fetch-metadata@08eff52bf64351f401fb50d4972fa95b9f2c2d1b #v2.4.0
 
-      - if: ${{ contains(steps.dependabot-metadata.outputs.dependency-names, '@mdn/browser-compat-data') }}
+      - 
+        # if: ${{ contains(steps.dependabot-metadata.outputs.dependency-names, '@mdn/browser-compat-data') }}
         continue-on-error: true
         run: gh pr comment "$GITHUB_EVENT_NUMBER" --body "$BODY"
         env:
-          GITHUB_EVENT_NUMBER: ${{ github.event.number }}
+          GITHUB_EVENT_NUMBER: ${{ inputs.github_event_number }}
           # TODO: reinstate this post-merge checklist item when https://github.com/web-platform-dx/web-features/issues/1672 is resolved
           # - [ ] (Optional) [Trigger a workflow run to remove tagged compat features](https://github.com/web-platform-dx/web-features/actions/workflows/remove_tagged_compat_features.yml).
           BODY: |
