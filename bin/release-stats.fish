@@ -17,13 +17,13 @@ for rel in $releases
 
     if git checkout --quiet --detach $release
         echo $release
-        if npm install --silent
+        if npm ci --silent
             echo ```
             npx tsx ./scripts/stats.ts
             echo ```
         end
         if git checkout --quiet -
-            npm install --silent
+            npm ci --silent
         end
     end
     echo
