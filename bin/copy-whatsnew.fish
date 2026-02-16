@@ -16,7 +16,7 @@ set releases (gh api --paginate 'repos/web-platform-dx/web-features/releases' --
 
 # Get the latest comment URL using GitHub CLI
 set issue_url "https://github.com/web-platform-dx/web-features/issues/788"
-set latest_comment_id (gh api --paginate 'repos/web-platform-dx/web-features/issues/788/comments' --jq 'sort_by(.created_at) | .[-1].id')
+set latest_comment_id (gh api --paginate 'repos/web-platform-dx/web-features/issues/788/comments' | jq 'sort_by(.created_at) | .[-1].id')
 set latest_comment_url "$issue_url#issuecomment-$latest_comment_id"
 
 # Template with replacements
