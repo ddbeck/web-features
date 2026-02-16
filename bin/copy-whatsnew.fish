@@ -25,4 +25,4 @@ markdown-file-to-rtf-pasteboard.fish (echo "* What's new
     * Highlights:
         * TK
     * [Merged this week](https://github.com/web-platform-dx/web-features/pulls?q=is%3Apr+merged%3A$last_thursday..$yesterday+sort%3Aupdated-desc+)
-    * [Statistics]($latest_comment_url)" | psub)
+    * [Statistics]($latest_comment_url)" | tee /dev/tty | psub)
