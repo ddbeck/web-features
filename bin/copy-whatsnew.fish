@@ -20,7 +20,7 @@ set latest_comment_id (gh api --paginate 'repos/web-platform-dx/web-features/iss
 set latest_comment_url "$issue_url#issuecomment-$latest_comment_id"
 
 # Template with replacements
-markdown-file-to-rtf-pasteboard.fish (echo "* What's new
+markdown-file-to-rtf-pasteboard.fish (echo "* What's new in web-features
     * Releases: $releases
     * Highlights:
         * TK
