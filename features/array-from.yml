@@ -1,0 +1,5 @@
+name: Array.from()
+compat_features:
+  initial:
+    - javascript.builtins.Array.from
+    - javascript.builtins.TypedArray.from

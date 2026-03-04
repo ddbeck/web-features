@@ -1,0 +1,5 @@
+name: Array.of()
+compat_features:
+  initial:
+    - javascript.builtins.Array.of
+    - javascript.builtins.TypedArray.of

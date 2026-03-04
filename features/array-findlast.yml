@@ -1,0 +1,7 @@
+name: Array findLast() and findLastIndex()
+compat_features:
+  initial:
+    - javascript.builtins.Array.findLast
+    - javascript.builtins.Array.findLastIndex
+    - javascript.builtins.TypedArray.findLast
+    - javascript.builtins.TypedArray.findLastIndex

@@ -1,0 +1,5 @@
+name: Array at()
+compat_features:
+  initial:
+    - javascript.builtins.Array.at
+    - javascript.builtins.TypedArray.at

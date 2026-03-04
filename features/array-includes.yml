@@ -1,0 +1,5 @@
+name: Array includes()
+compat_features:
+  initial:
+    - javascript.builtins.Array.includes
+    - javascript.builtins.TypedArray.includes

@@ -1,0 +1,5 @@
+name: Array flat() and flatMap()
+compat_features:
+  initial:
+    - javascript.builtins.Array.flat
+    - javascript.builtins.Array.flatMap

@@ -1,0 +1,5 @@
+name: Array grouping
+compat_features:
+  initial:
+    - javascript.builtins.Map.groupBy
+    - javascript.builtins.Object.groupBy

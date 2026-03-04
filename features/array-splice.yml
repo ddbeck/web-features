@@ -1,0 +1,4 @@
+name: Array splice()
+compat_features:
+  initial:
+    - javascript.builtins.Array.splice
