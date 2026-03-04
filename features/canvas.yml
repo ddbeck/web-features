@@ -1,0 +1,13 @@
+name: <canvas>
+compat_features:
+  initial:
+    - api.HTMLCanvasElement
+    - api.HTMLCanvasElement.getContext
+    - html.elements.canvas
+    - html.elements.canvas.height
+    - html.elements.canvas.width
+  principal:
+    - api.HTMLCanvasElement.height
+    - api.HTMLCanvasElement.toBlob
+    - api.HTMLCanvasElement.toDataURL
+    - api.HTMLCanvasElement.width

@@ -1,0 +1,7 @@
+name: Array iterators
+compat_features:
+  initial:
+    - javascript.builtins.Array.@@iterator
+    - javascript.builtins.Array.entries
+    - javascript.builtins.Array.keys
+    - javascript.builtins.Array.values

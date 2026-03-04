@@ -1,0 +1,4 @@
+name: Array.isArray()
+compat_features:
+  initial:
+    - javascript.builtins.Array.isArray

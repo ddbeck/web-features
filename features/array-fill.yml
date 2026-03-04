@@ -1,0 +1,5 @@
+name: Array fill()
+compat_features:
+  initial:
+    - javascript.builtins.Array.fill
+    - javascript.builtins.TypedArray.fill

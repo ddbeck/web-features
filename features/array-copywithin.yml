@@ -1,0 +1,5 @@
+name: Array copyWithin()
+compat_features:
+  initial:
+    - javascript.builtins.Array.copyWithin
+    - javascript.builtins.TypedArray.copyWithin

@@ -1,0 +1,7 @@
+name: Array find() and findIndex()
+compat_features:
+  initial:
+    - javascript.builtins.Array.find
+    - javascript.builtins.Array.findIndex
+    - javascript.builtins.TypedArray.find
+    - javascript.builtins.TypedArray.findIndex

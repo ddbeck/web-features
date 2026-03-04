@@ -1,0 +1,4 @@
+name: Array.fromAsync()
+compat_features:
+  initial:
+    - javascript.builtins.Array.fromAsync

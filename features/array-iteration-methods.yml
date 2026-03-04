@@ -1,0 +1,12 @@
+name: Array iteration methods
+compat_features:
+  initial:
+    - javascript.builtins.Array.every
+    - javascript.builtins.Array.filter
+    - javascript.builtins.Array.forEach
+    - javascript.builtins.Array.indexOf
+    - javascript.builtins.Array.lastIndexOf
+    - javascript.builtins.Array.map
+    - javascript.builtins.Array.reduce
+    - javascript.builtins.Array.reduceRight
+    - javascript.builtins.Array.some

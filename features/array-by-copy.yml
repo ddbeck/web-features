@@ -1,0 +1,10 @@
+name: Array by copy
+compat_features:
+  initial:
+    - javascript.builtins.Array.toReversed
+    - javascript.builtins.Array.toSorted
+    - javascript.builtins.Array.toSpliced
+    - javascript.builtins.Array.with
+    - javascript.builtins.TypedArray.toReversed
+    - javascript.builtins.TypedArray.toSorted
+    - javascript.builtins.TypedArray.with
