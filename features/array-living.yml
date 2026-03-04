@@ -1,0 +1,79 @@
+name: Array
+description: Arrays are ordered lists of JavaScript values.
+spec: https://tc39.es/ecma262/multipage/indexed-collections.html#sec-array-objects
+group: arrays
+status:
+  compute_from:
+    - javascript.builtins.Array
+    - javascript.builtins.Array.Array
+    - javascript.builtins.Array.concat
+    - javascript.builtins.Array.join
+    - javascript.builtins.Array.length
+    - javascript.builtins.Array.pop
+    - javascript.builtins.Array.push
+    - javascript.builtins.Array.reverse
+    - javascript.builtins.Array.shift
+    - javascript.builtins.Array.slice
+    - javascript.builtins.Array.sort
+    - javascript.builtins.Array.toString
+    - javascript.builtins.Array.unshift
+    - javascript.grammar.array_literals
+compat_features:
+  - javascript.builtins.Array
+  - javascript.builtins.Array.Array
+  - javascript.builtins.Array.concat
+  - javascript.builtins.Array.join
+  - javascript.builtins.Array.length
+  - javascript.builtins.Array.pop
+  - javascript.builtins.Array.push
+  - javascript.builtins.Array.reverse
+  - javascript.builtins.Array.shift
+  - javascript.builtins.Array.slice
+  - javascript.builtins.Array.sort
+  - javascript.builtins.Array.toString
+  - javascript.builtins.Array.unshift
+  - javascript.grammar.array_literals
+  - javascript.builtins.Array.at
+  - javascript.builtins.TypedArray.at
+  - javascript.builtins.Array.toReversed
+  - javascript.builtins.Array.toSorted
+  - javascript.builtins.Array.toSpliced
+  - javascript.builtins.Array.with
+  - javascript.builtins.TypedArray.toReversed
+  - javascript.builtins.TypedArray.toSorted
+  - javascript.builtins.TypedArray.with
+  - javascript.builtins.Array.copyWithin
+  - javascript.builtins.TypedArray.copyWithin
+  - javascript.builtins.Array.fill
+  - javascript.builtins.TypedArray.fill
+  - javascript.builtins.Array.find
+  - javascript.builtins.Array.findIndex
+  - javascript.builtins.TypedArray.find
+  - javascript.builtins.TypedArray.findIndex
+  - javascript.builtins.Array.findLast
+  - javascript.builtins.Array.findLastIndex
+  - javascript.builtins.TypedArray.findLast
+  - javascript.builtins.TypedArray.findLastIndex
+  - javascript.builtins.Array.flat
+  - javascript.builtins.Array.flatMap
+  - javascript.builtins.Array.from
+  - javascript.builtins.TypedArray.from
+  - javascript.builtins.Array.includes
+  - javascript.builtins.TypedArray.includes
+  - javascript.builtins.Array.isArray
+  - javascript.builtins.Array.every
+  - javascript.builtins.Array.filter
+  - javascript.builtins.Array.forEach
+  - javascript.builtins.Array.indexOf
+  - javascript.builtins.Array.lastIndexOf
+  - javascript.builtins.Array.map
+  - javascript.builtins.Array.reduce
+  - javascript.builtins.Array.reduceRight
+  - javascript.builtins.Array.some
+  - javascript.builtins.Array.@@iterator
+  - javascript.builtins.Array.entries
+  - javascript.builtins.Array.keys
+  - javascript.builtins.Array.values
+  - javascript.builtins.Array.of
+  - javascript.builtins.TypedArray.of
+  - javascript.builtins.Array.splice
