@@ -1,0 +1,6 @@
+#!/usr/bin/env fish
+
+npm ci
+and npm run dist
+and npm test
+and git commit --all --message="Refresh dist"
