@@ -1,7 +1,7 @@
 {
   "name": "web-features",
   "description": "Curated list of Web platform features",
-  "version": "3.24.0",
+  "version": "3.25.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.39",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   }
 }
