@@ -13,7 +13,7 @@
   "type": "module",
   "main": "index.ts",
   "engines": {
-    "node": ">=20.10.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "audit-consumers": "tsx scripts/audit-consumers.ts",
