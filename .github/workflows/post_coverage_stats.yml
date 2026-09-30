@@ -4,9 +4,12 @@ permissions: {}
 
 on:
   schedule:
-    # Thursdays at 4:00 in the morning. Run times aren't guaranteed, so
-    # hopefully this will run before the WebDX CG meeting each week.
-    - cron: 0 4 * * 4
+    # Weekly on Thursdays at 4:33 AM. Run times aren't guaranteed, so hopefully
+    # this will run before the WebDX CG meeting each week.
+    - cron: 33 4 * * 4
+      timezone: Etc/UTC
+    # 1st of the Month at 6:53 AM.
+    - cron: 53 6 1 * *
       timezone: Etc/UTC
   workflow_dispatch:
     inputs:
@@ -95,11 +98,28 @@ jobs:
         run: |
           npm ci
           current_report_markdown="$(mktemp)"
-          npx tsx ./scripts/stats-report.ts --start-date="$START_DATE" --end-date="$END_DATE" "$current_stats_json" > "$current_report_markdown"
+          header=""
+          if [ "$EVENT" = "MONTHLY" ]; then
+            header="## $(date --utc -d "$END_DATE" '+%B %Y')"
+          elif [ "$EVENT" = "WEEKLY" ]; then
+            header="## Week $(date --utc -d "$END_DATE" '+%U %G')"
+          elif [ "$EVENT" = "WORKFLOW_DISPATCH" ]; then
+            header=""
+          else
+            echo "Unexpected event: $EVENT"
+            exit 1
+          fi
+          npx tsx ./scripts/stats-report.ts --prepend="$header" --start-date="$START_DATE" --end-date="$END_DATE" "$current_stats_json" > "$current_report_markdown"
           echo "current_report_markdown=$current_report_markdown" >> "$GITHUB_ENV"
         env:
           START_DATE: ${{ steps.commits.outputs.start_timestamp }}
           END_DATE: ${{ steps.commits.outputs.end_timestamp }}
+          EVENT: >
+            ${{ case(
+              github.event.schedule.cron == '33 4 * * 4', 'WEEKLY',
+              github.event.schedule.cron == '53 6 1 * *', 'MONTHLY',
+              'WORKFLOW_DISPATCH'
+            ) }}
       - name: Post comment
         run: gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body-file="$current_report_markdown"
         env:
