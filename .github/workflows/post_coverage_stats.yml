@@ -4,9 +4,12 @@ permissions: {}
 
 on:
   schedule:
-    # Thursdays at 4:00 in the morning. Run times aren't guaranteed, so
-    # hopefully this will run before the WebDX CG meeting each week.
-    - cron: 0 4 * * 4
+    # WEEKLY: Run times aren't guaranteed, so hopefully this will run before the
+    # WebDX CG meeting each week.
+    - cron: 33 4 * * 4  # Weekly on Thursdays at 4:33 AM.
+      timezone: Etc/UTC
+    # MONTHLY
+    - cron: 53 6 1 * *  # 1st of the Month at 6:53 AM.
       timezone: Etc/UTC
   workflow_dispatch:
     inputs:
@@ -20,10 +23,18 @@ on:
         description: "issue number to comment on"
         type: string
 
+# XXX change DEFAULT_ to use `DEFAULT_WEEKLY_START_DATE`, `DEFAULT_WEEKLY_END_DATE`, `DEFAULT_MONTHLY_START_DATE`, `DEFAULT_MONTHL_END_DATE`, etc.
+
 env:
   DEFAULT_ISSUE: 4402
   DEFAULT_START_DATE: "last thursday 04:00:01"
   DEFAULT_END_DATE: "today 04:00:00"
+  SCHEDULE_NAME: >-
+    ${{ case(
+      github.event.schedule.cron == '33 4 * * 4', 'WEEKLY',
+      github.event.schedule.cron == '53 6 1 * *', 'MONTHLY',
+      'AD HOC'
+    ) }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -95,9 +106,21 @@ jobs:
         run: |
           npm ci
           current_report_markdown="$(mktemp)"
-          npx tsx ./scripts/stats-report.ts --start-date="$START_DATE" --end-date="$END_DATE" "$current_stats_json" > "$current_report_markdown"
+          header=""
+          if [ "$SCHEDULE_NAME" = "MONTHLY" ]; then
+            header="## $(date --utc -d "$END_DATE" '+%B %Y')"
+          elif [ "$SCHEDULE_NAME" = "WEEKLY" ]; then
+            header="## Week $(date --utc -d "$END_DATE" '+%U %G')"
+          elif [ "$SCHEDULE_NAME" = "AD HOC" ]; then
+            header=""
+          else
+            echo "Unexpected event: $SCHEDULE_NAME"  # XXX This is failing for reasons I don't understand!
+            exit 1
+          fi
+          npx tsx ./scripts/stats-report.ts --prepend="$header" --start-date="$START_DATE" --end-date="$END_DATE" "$current_stats_json" > "$current_report_markdown"
           echo "current_report_markdown=$current_report_markdown" >> "$GITHUB_ENV"
         env:
+          SCHEDULE_NAME: ${{ env.SCHEDULE_NAME }}
           START_DATE: ${{ steps.commits.outputs.start_timestamp }}
           END_DATE: ${{ steps.commits.outputs.end_timestamp }}
       - name: Post comment
